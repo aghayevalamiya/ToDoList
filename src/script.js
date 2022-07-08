@@ -1,28 +1,16 @@
 const TODOS = "TODOS";
 class Todo {
-    /**
-     * Creates todo element.
-     * @param {number} id Identifier.
-     * @param {string} [title] Title. Default is empty string.
-     */
+   
     constructor(id, title = "") {
-        /**
-         * @type {number}
-         */
+        
         this.id = id;
-        /**
-         * @type {string}
-         */
-        this.title = title.trim();
-    }
+        
+        this.title = title.trim(); // to delete whitespace both from right and left of string
+   }
 }
 
 class TodoService {
-    /**
-     * Todo list.
-     * @type {Todo[]}.
-     * @private
-     */
+    
     _todos;
 
     constructor(todos = []) {
@@ -33,20 +21,13 @@ class TodoService {
         }
     }
 
-    /**
-     * Gets todos.
-     * @returns Todos array.
-     */
     getTodos() {
         return [...this._todos];
     }
 
-    /**
-     * Adds new todo by title.
-     * @param {string} [title] - Todo title. Default is empty string.
-     */
+    
     addTodo(title = "") {
-        if (!this._todos.some((t) => !t.title)) {
+        if (!this._todos.some((t) => !t.title)) { // if there is any todo
             this._todos = [...this._todos, new Todo(this._generateId(), title)];
             this._commit();
         } else {
@@ -54,12 +35,7 @@ class TodoService {
         }
     }
 
-    /**
-     * Edits todo by identifier.
-     * @param {number} id Todo's id.
-     * @param {string} title Title.
-     * @throws Throws error when title argument is empty.
-     */
+ 
     editTodo(id, title) {
         if (!title) throw new Error("You can not empty title.");
         const todos = [...this._todos];
@@ -68,19 +44,13 @@ class TodoService {
         this._commit();
     }
 
-    /**
-     * Delete todo by identifier.
-     * @param {number} id Todo's identifier.
-     */
+  
     deleteTodo(id) {
         this._todos = this._todos.filter((t) => t.id !== id);
         this._commit();
     }
 
-    /**
-     * Sort todo array.
-     * @param {boolean?} direction Sorting direction. Default is true.
-     */
+    
     sortTodos(direction = true) {
         const todos = [...this._todos]
             .filter((t) => t.title)
@@ -96,39 +66,21 @@ class TodoService {
         this._commit();
     }
 
-    /**
-     * Initialize todos from storage.
-     * @private
-     */
+    
     _init() {
         this._todos = JSON.parse(localStorage.getItem(TODOS) || "[]");
     }
 
-    /**
-     * Commits changes to storage.
-     * @private
-     */
     _commit() {
         localStorage.setItem(TODOS, JSON.stringify(this._todos));
     }
 
-    /**
-     * Generates next available id or 1 if todo array is empty.
-     * @private
-     * @returns {number} Id.
-     */
     _generateId() {
         return this._todos.length ? [...this._todos].sort((t1, t2) => t2.id - t1.id)[0].id + 1 :
             1;
     }
 
-    /**
-     * Gets index of todo in "todo" array.
-     * @private
-     * @param {number} id Todo identifier.
-     * @throws Throws error when there are no todo with given id.
-     * @returns Index of todo in "todos" array.
-     */
+    
     _getIndex(id) {
         const index = this._todos.findIndex((t) => t.id === id);
 
